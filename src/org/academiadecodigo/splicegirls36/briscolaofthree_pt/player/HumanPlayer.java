@@ -4,7 +4,7 @@ import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Card;
 
 public class HumanPlayer extends Player {
     @Override
-    public Card play() {
-        return null;
+    public void play() {
+        return;
     }
 }
