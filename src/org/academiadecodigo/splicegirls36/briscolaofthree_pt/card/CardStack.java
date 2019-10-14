@@ -9,4 +9,8 @@ public class CardStack {
     CardStack() {
         this.stack = new LinkedList<>();
     }
+
+    public void place(Card card) {
+
+    }
 }

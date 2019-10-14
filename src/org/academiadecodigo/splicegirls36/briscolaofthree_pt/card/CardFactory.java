@@ -4,19 +4,29 @@ import org.academiadecodigo.splicegirls36.briscolaofthree_pt.Game;
 
 public class CardFactory {
 
-    public static CardStack createCards(CardStackType stackType) {
+    public static Deck createDeck() {
+        Deck deck = new Deck();
+        createCards(deck);
+        deck.shuffle();
+        return deck;
+    }
 
-        switch (stackType) {
+    public static Pile createPile() {
+        Pile pile = new Pile();
+        return pile;
+    }
 
-            case DECK:
-                Deck deck = new Deck();
-                deck.shuffle();
-                return deck;
-            case PILE:
-                Pile pile = new Pile();
-                return pile;
-            default:
-                throw new IllegalStateException("Unexpected value: " + stackType);
+    public static void createCards(Deck deck) {
+
+        Card card;
+        Suit[] suits = Suit.values();
+        Rank[] ranks = Rank.values();
+
+        for (int i = suits.length; i > 0; i--) {
+            for (int j = ranks.length; j > 0; j--) {
+                card = new Card(ranks[j], suits[i]);
+                deck.place(card);
+            }
         }
     }
 }
