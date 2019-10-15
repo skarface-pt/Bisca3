@@ -12,9 +12,10 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    public void play() {
+    public Card play() {
 
         this.pick = hand[Randomizer.getRandom(Game.STARTING_NUMBER_CARDS_HAND)];
+        return this.pick;
 
     }
 }

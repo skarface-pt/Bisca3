@@ -8,7 +8,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void play() {
-        return;
+    public Card play() {
+        return null;
     }
 }

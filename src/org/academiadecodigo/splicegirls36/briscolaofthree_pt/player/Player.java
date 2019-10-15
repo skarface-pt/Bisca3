@@ -29,7 +29,7 @@ public abstract class Player {
         this.hand = hand;
     }
 
-    public abstract void play();
+    public abstract Card play();
 
     public void draw(Deck deck) {
 

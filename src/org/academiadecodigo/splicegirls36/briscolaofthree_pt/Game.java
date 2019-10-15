@@ -1,12 +1,13 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt;
 
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Card;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.CardFactory;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.CardStackType;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Deck;
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.*;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.ComputerPlayer;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.HumanPlayer;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.Player;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Game {
 
@@ -17,23 +18,40 @@ public class Game {
     public static final int NUMBER_CARDS_TABLE = 2;
 
     private Deck deck;
-    private Card[] table;
     private Player player1;
     private Player player2;
+    private Card briscola;
+    private Suit trump;
+    private Suit winnerSuit;
+    private List<Player> sequence;
+
 
     public Game () {
 
         this.deck = CardFactory.createDeck();
-        this.table = new Card[NUMBER_CARDS_TABLE];
         this.player1 = new ComputerPlayer("Computer1");
         this.player2 = new ComputerPlayer("Computer2");
-        setup();
+        this.sequence = new LinkedList<>();
     }
 
     private void setup() {
+        int turn = Randomizer.getRandom(1) + 1;
 
-        player1.take(this.deal());
-        player2.take(this.deal());
+        if (turn == 1) {
+            player1.take(this.deal());
+            player2.take(this.deal());
+            sequence.add(player1);
+            sequence.add(player2);
+        } else {
+            player2.take(this.deal());
+            player1.take(this.deal());
+            sequence.add(player2);
+            sequence.add(player1);
+        }
+
+        briscola = deck.draw();
+        trump = briscola.getSuit();
+
     }
 
     public Card[] deal() {
@@ -46,8 +64,27 @@ public class Game {
         return hand;
     }
 
-    public void placeInTable(Card card, Player player) {
+
+
+
+
+    public void run () {
+
+        setup();
+
+        for (Player player: sequence) {
+            player.play();
+        }
+        winnerSuit = sequence.get(0).getPick().getSuit();
+
+
 
 
     }
+
+    //private Player
+
+
+
+
 }
