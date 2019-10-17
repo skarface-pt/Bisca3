@@ -6,6 +6,7 @@ import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.HumanPlayer;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.Player;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,10 +21,39 @@ public class Game {
     private Deck deck;
     private Player player1;
     private Player player2;
-    private Card briscola;
-    private Suit trump;
-    private Suit winnerSuit;
-    private List<Player> sequence;
+    private Sequence sequence;
+
+    private class Sequence implements Iterable<Player> {
+
+        private Card briscola;
+        private Suit trump;
+        private Suit winningSuit;
+        private List<Player> sequencePlayed;
+
+        Sequence() {
+
+            sequencePlayed = new LinkedList<>();
+        }
+
+        void add (Player player) {
+            sequencePlayed.add(player);
+        }
+
+        void setWinningSuit() {
+
+            this.winningSuit = sequencePlayed.get(0).getPick().getSuit();
+        }
+
+        void setBriscola(Card briscola) {
+            this.briscola = briscola;
+            this.trump = briscola.getSuit();
+        }
+
+        @Override
+        public Iterator<Player> iterator() {
+            return sequencePlayed.iterator();
+        }
+    }
 
 
     public Game () {
@@ -31,7 +61,6 @@ public class Game {
         this.deck = CardFactory.createDeck();
         this.player1 = new ComputerPlayer("Computer1");
         this.player2 = new ComputerPlayer("Computer2");
-        this.sequence = new LinkedList<>();
     }
 
     private void setup() {
@@ -49,8 +78,7 @@ public class Game {
             sequence.add(player1);
         }
 
-        briscola = deck.draw();
-        trump = briscola.getSuit();
+        sequence.setBriscola(deck.draw());
 
     }
 
@@ -75,7 +103,7 @@ public class Game {
         for (Player player: sequence) {
             player.play();
         }
-        winnerSuit = sequence.get(0).getPick().getSuit();
+        sequence.setWinningSuit();
 
 
 
