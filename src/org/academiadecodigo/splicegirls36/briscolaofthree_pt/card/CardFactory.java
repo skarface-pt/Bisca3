@@ -1,7 +1,5 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.card;
 
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.Game;
-
 public class CardFactory {
 
     public static Deck createDeck() {
@@ -19,8 +17,8 @@ public class CardFactory {
     public static void createCards(Deck deck) {
 
         Card card;
-        Suit[] suits = Suit.values();
-        Rank[] ranks = Rank.values();
+        Card.Suit[] suits = Card.Suit.values();
+        Card.Rank[] ranks = Card.Rank.values();
 
         for (int i = suits.length; i > 0; i--) {
             for (int j = ranks.length; j > 0; j--) {

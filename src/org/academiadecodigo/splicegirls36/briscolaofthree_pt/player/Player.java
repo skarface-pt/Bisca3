@@ -42,7 +42,14 @@ public abstract class Player {
         }
     }
 
+    public int countPoints() {
+
+        return pile.countPoints();
+    }
+
     public Card getPick() {
         return pick;
     }
+
+
 }

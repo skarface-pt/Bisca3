@@ -13,4 +13,8 @@ public class CardStack {
     public void place(Card card) {
 
     }
+
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
 }
