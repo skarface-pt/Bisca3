@@ -10,8 +10,9 @@ public class CardStack {
         this.stack = new LinkedList<>();
     }
 
-    public void place(Card card) {
+    public void place(Card card){
 
+        stack.push(card);
     }
 
     public boolean isEmpty() {

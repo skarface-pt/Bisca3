@@ -13,78 +13,53 @@ public class Game {
     public static final int NUMBER_CARDS_DECK = 40;
     public static final int NUMBER_CARDS_PER_SUIT = 10;
     public static final int NUMBER_CARDS_TABLE = 2;
+    public static final int NUMBER_PLAYERS = 2;
 
-    private Deck deck;
     private Player player1;
     private Player player2;
+    private Table table;
+    private Player
 
-    private Card briscola;
-    private Card.Suit trumpSuit;
-    private Sequence sequence;
-
-    private boolean isStartingTrick = true;
-
-    private class CardComparator implements Comparator<Card> {
-
-        @Override
-        public int compare(Card card1, Card card2) {
-            if ((card1.getSuit().equals(trumpSuit) && card2.getSuit().equals(trumpSuit)) ||
-                    (card1.getSuit().equals(sequence.leadSuit) && card2.getSuit().equals(sequence.leadSuit))) {
-                return card1.getRank().compareTo(card2.getRank());
-            }
-            if (card1.getSuit().equals(trumpSuit)) {
-                return 1;
-            }
-            if (card2.getSuit().equals(trumpSuit)) {
-                return -1;
-            }
-            if (card1.getSuit().equals(sequence.leadSuit)) {
-                return 1;
-            }
-            if (card2.getSuit().equals(sequence.leadSuit)) {
-                return -1;
-            }
-            return 0;
-        }
-    }
-
-    private class Sequence implements Iterable<Player> {
+    private class Table implements Iterable<Pick> {
 
         private Card.Suit leadSuit;
-        private List<Player> sequencePlayed;
+        private List<Pick> sequence;
+        private Card briscola;
+        private Card.Suit trumpSuit;
+        private Deck deck;
 
-        Sequence() {
-
-            sequencePlayed = new LinkedList<>();
+        Table() {
+            this.deck = CardFactory.createDeck();
+            sequence = new LinkedList<>();
         }
 
-        void add (Player player) {
-            sequencePlayed.add(player);
+        void add (Pick pick) {
+            sequence.add(pick);
         }
 
 
         @Override
-        public Iterator<Player> iterator() {
-            return sequencePlayed.iterator();
+        public Iterator<Pick> iterator() {
+            return sequence.iterator();
         }
 
-        List<Card> getCards(Card.Suit suit) {
+        List<Pick> getPicks(Card.Suit suit) {
 
-            Iterator<Player> iterator = iterator();
-            List<Card> cards = new LinkedList<>();
-            Card nextCard;
+            Iterator<Pick> iterator = iterator();
+            List<Pick> picks = new LinkedList<>();
+            Pick nextPick;
 
             while (iterator().hasNext()) {
-                nextCard = iterator.next().getPick();
-                if (nextCard.getSuit().equals(suit)) {
-                    cards.add(nextCard);
+                nextPick = iterator.next();
+                if (nextPick.getCard().getSuit().equals(suit)) {
+                    picks.add(nextPick);
                 }
             }
-            return cards;
+            return picks;
         }
 
         void setLeadSuit() {
-            this.leadSuit = sequencePlayed.get(0).getPick().getSuit();
+            this.leadSuit = sequence.get(0).getCard().getSuit();
         }
 
         Card.Suit getLeadSuit() {
@@ -92,106 +67,147 @@ public class Game {
             return leadSuit;
         }
 
-    }
+        private void setBriscola() {
+            this.briscola = deck.draw();
+            this.trumpSuit = briscola.getSuit();
+        }
 
+        List<Pick> getPicksFor(Card.Suit suit) {
+
+            List<Pick> picks = new ArrayList<>();
+            for (Pick pick : sequence) {
+                if (pick.getCard().getSuit().equals(suit)) {
+                    picks.add(pick);
+                }
+            }
+            return picks;
+        }
+
+        private Pick findHighestPick(Card.Suit suit) {
+
+            PickComparator pickComparator = new PickComparator();
+            List<Pick> leadPicks;
+            Pick leadPick;
+
+            leadPicks = getPicks(getLeadSuit());
+            leadPick = Collections.max(leadPicks, pickComparator);
+
+            return leadPick;
+        }
+
+        private Player findTrickWinner() {
+
+            List<Pick> trumpPicks = getPicks(trumpSuit);
+            Pick leadPick = null;
+
+            if (trumpPicks.isEmpty()) {
+
+                leadPick = findHighestPick(leadSuit);
+                return leadPick.getPlayer();
+            }
+
+            leadPick = findHighestPick(trumpSuit);
+            return leadPick.getPlayer();
+        }
+
+        private class PickComparator implements Comparator<Pick> {
+
+            @Override
+            public int compare(Pick pick1, Pick pick2) {
+                if ((pick1.getCard().getSuit().equals(trumpSuit) && pick2.getCard().getSuit().equals(trumpSuit)) ||
+                        (pick1.getCard().getSuit().equals(leadSuit) && pick2.getCard().getSuit().equals(leadSuit))) {
+                    return pick1.getCard().getRank().compareTo(pick2.getCard().getRank());
+                }
+                if (pick1.getCard().getSuit().equals(trumpSuit)) {
+                    return 1;
+                }
+                if (pick2.getCard().getSuit().equals(trumpSuit)) {
+                    return -1;
+                }
+                if (pick1.getCard().getSuit().equals(table.leadSuit)) {
+                    return 1;
+                }
+                if (pick2.getCard().getSuit().equals(table.leadSuit)) {
+                    return -1;
+                }
+                return 0;
+            }
+        }
+
+    }
 
     public Game () {
 
-        this.deck = CardFactory.createDeck();
+
         this.player1 = new ComputerPlayer("Computer1");
         this.player2 = new ComputerPlayer("Computer2");
-        this.sequence = new Sequence();
+        this.table = new Table();
     }
 
     private void setup() {
-        int turn = Randomizer.getRandom(1) + 1;
+        int turn = Randomizer.getRandom(NUMBER_PLAYERS) + 1;
 
         if (turn == 1) {
             player1.take(this.deal());
             player2.take(this.deal());
-            sequence.add(player1);
-            sequence.add(player2);
+            table.add(player1, );
+            table.add(player2);
         } else {
             player2.take(this.deal());
             player1.take(this.deal());
-            sequence.add(player2);
-            sequence.add(player1);
+            table.add(player2);
+            table.add(player1);
         }
 
-        setBriscola(deck.draw());
+        table.setBriscola();
+
+    }
+
+    public void runTrick() {
+
 
     }
 
 
+    public List<Card> deal() {
 
-    public Card[] deal() {
+        List<Card> hand = new ArrayList<>(STARTING_NUMBER_CARDS_HAND);
 
-        Card[] hand = (isStartingTrick) ? new Card[STARTING_NUMBER_CARDS_HAND] : new Card[1];
-
-        for (int i = 0; i < hand.length; i++) {
-            hand[i] = deck.draw();
+        for (int i = 0; i < hand.size(); i++) {
+            hand.add(deck.draw());
         }
         return hand;
     }
 
     public void run () {
 
+        Player trickWinner;
+        List<Card> trickCards = new ArrayList<>();
+
         setup();
 
-        for (Player player : sequence) {
-            player.play();
+        for (Player player : table) {
+            trickCards.add(player.play());
         }
-        sequence.setLeadSuit();
+        table.setLeadSuit();
+        trickWinner = findTrickWinner();
+        trickWinner.collectCards(trickCards);
 
-        isStartingTrick = false;
+        // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
+        //table.advanceNextRound();
 
-        while (!deck.isEmpty()) {
+        /**while (!deck.isEmpty()) {
             for (Player player : sequence) {
-                player.play();
+                trickCards.add(player.play());
             }
             sequence.setLeadSuit();
 
-        }
-    }
+            trickWinner = findTrickWinner();
+            trickWinner.collectCards(trickCards);
 
-    private Card findHighestCard(Card.Suit suit) {
-
-        CardComparator cardComparator = new CardComparator();
-        List<Card> leadCards;
-        Card leadCard;
-
-        leadCards = sequence.getCards(sequence.getLeadSuit());
-        leadCard = Collections.max(leadCards, cardComparator);
-
-        return leadCard;
-    }
-
-
-
-    private Player findTrickWinner() {
-
-        List<Card> trumpCards = sequence.getCards(trumpSuit);
-        Card leadCard = null;
-
-        if (trumpCards.isEmpty()) {
-
-            leadCard = findHighestCard(sequence.leadSuit);
-
-            for (Player player : sequence) {
-                if (player.getPick().equals(leadCard)) {
-                    return player;
-                }
-            }
-        }
-
-        leadCard = findHighestCard(trumpSuit);
-        for (Player player : sequence) {
-            if (player.getPick().equals(leadCard)) {
-                return player;
-            }
-        }
-        System.err.println("This line should never be reached, because by the very rules of the game a trick winner is always found.");
-        return null;
+        // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
+            sequence.advanceNextRound();
+        }**/
     }
 
     private Player findGameWinner() {
@@ -210,11 +226,6 @@ public class Game {
         }
         System.err.println("This line should never be reached, because by the very rules of the game a win or a tie are the only possible outcomes");
         return null;
-    }
-
-    private void setBriscola(Card briscola) {
-        this.briscola = briscola;
-        this.trumpSuit = briscola.getSuit();
     }
 
 }

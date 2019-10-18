@@ -1,6 +1,6 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.card;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class Pile extends CardStack {
 
@@ -12,7 +12,7 @@ public class Pile extends CardStack {
         return sum;
     }
 
-    void place(LinkedList<Card> cards) {
+    public void place(List<Card> cards) {
 
         for (Card card : cards) {
             stack.push(card);

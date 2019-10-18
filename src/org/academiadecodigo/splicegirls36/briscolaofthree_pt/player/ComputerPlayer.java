@@ -1,6 +1,5 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.player;
 
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.Game;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.Randomizer;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Card;
 
@@ -13,8 +12,8 @@ public class ComputerPlayer extends Player {
     @Override
     public Card play() {
 
-        this.pick = hand[Randomizer.getRandom(hand.length)];
-        return this.pick;
+        Card pick = hand.get(Randomizer.getRandom(hand.size()));
+        return pick;
 
     }
 }

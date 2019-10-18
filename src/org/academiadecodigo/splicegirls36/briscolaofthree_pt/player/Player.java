@@ -6,26 +6,27 @@ import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.CardFactory;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Deck;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Pile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Player {
 
     private String name;
 
-    protected Card[] hand;
+    protected List<Card> hand;
 
     protected Pile pile;
-
-    protected Card pick;
 
 
     public Player (String name) {
 
         this.name = name;
-        hand = new Card[Game.STARTING_NUMBER_CARDS_HAND];
+        hand = new ArrayList<>(Game.STARTING_NUMBER_CARDS_HAND);
         this.pile = CardFactory.createPile();
 
     }
 
-    public void take(Card[] hand) {
+    public void take(List<Card> hand) {
         this.hand = hand;
     }
 
@@ -34,12 +35,7 @@ public abstract class Player {
     public void draw(Deck deck) {
 
         Card card = deck.draw();
-
-        for (int i = 0; i < hand.length; i++) {
-            if (hand[i] == null) {
-                hand[i] = card;
-            }
-        }
+        hand.add(card);
     }
 
     public int countPoints() {
@@ -47,8 +43,9 @@ public abstract class Player {
         return pile.countPoints();
     }
 
-    public Card getPick() {
-        return pick;
+    public void collectCards(List<Card> playedCards) {
+
+        pile.place(playedCards);
     }
 
 
