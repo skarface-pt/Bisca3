@@ -23,7 +23,7 @@ public class Game {
 
         private Card.Suit leadSuit;
         private List<Pick> sequence;
-        private Player[] orderOfPlay;
+        private ArrayList<Player> orderOfPlay;
         private Card briscola;
         private Card.Suit trumpSuit;
         private Deck deck;
@@ -31,7 +31,7 @@ public class Game {
         Table() {
             this.deck = CardFactory.createDeck();
             sequence = new LinkedList<>();
-            orderOfPlay = new Player[NUMBER_PLAYERS];
+            orderOfPlay = new ArrayList<>(NUMBER_PLAYERS);
         }
 
         void add (Player player, Card card) {
@@ -41,7 +41,7 @@ public class Game {
         void setOrderFor (Player player, int order) {
 
             if (order > 0 && order < NUMBER_PLAYERS) {
-                orderOfPlay[order] = player;
+                orderOfPlay.add(order - 1, player);
             }
         }
 
@@ -79,15 +79,11 @@ public class Game {
             this.trumpSuit = briscola.getSuit();
         }
 
-        List<Pick> getPicksFor(Card.Suit suit) {
+        private void setupOrderForNextTrick(Player trickWinner) {
 
-            List<Pick> picks = new ArrayList<>();
-            for (Pick pick : sequence) {
-                if (pick.getCard().getSuit().equals(suit)) {
-                    picks.add(pick);
-                }
-            }
-            return picks;
+            int trickWinnerPos = sequence.indexOf(trickWinner);
+
+            Collections.rotate(sequence, -trickWinnerPos);
         }
 
         private Pick findHighestPick(Card.Suit suit) {
@@ -115,6 +111,39 @@ public class Game {
 
             leadPick = findHighestPick(trumpSuit);
             return leadPick.getPlayer();
+        }
+
+        private List<Card> getCards() {
+
+            List<Card> cards = new ArrayList<>();
+
+            for (Pick pick : sequence) {
+                cards.add(pick.getCard());
+            }
+            return cards;
+        }
+
+        private void resetSequence() {
+
+            sequence.clear();
+        }
+
+        public List<Card> deal() {
+
+            List<Card> hand = new ArrayList<>(STARTING_NUMBER_CARDS_HAND);
+
+            for (int i = 0; i < hand.size(); i++) {
+                hand.add(table.deck.draw());
+            }
+            return hand;
+        }
+
+        private void dealAllPlayers() {
+
+            for (int i = 0; i < orderOfPlay.size(); i++) {
+
+                orderOfPlay.get(i).take(deal());
+            }
         }
 
         private class PickComparator implements Comparator<Pick> {
@@ -156,63 +185,65 @@ public class Game {
         if (turn == 1) {
             table.setOrderFor(player1, 1);
             table.setOrderFor(player2, 2);
-            player1.take(this.deal());
-            player2.take(this.deal());
+            player1.take(table.deal());
+            player2.take(table.deal());
         } else {
             table.setOrderFor(player1, 2);
             table.setOrderFor(player2, 1);
-            player2.take(this.deal());
-            player1.take(this.deal());
+            player2.take(table.deal());
+            player1.take(table.deal());
         }
 
         table.setBriscola();
-
     }
 
-    public void runTrick() {
+    public Player runTrick() {
 
+        Player trickWinner = null;
 
-    }
-
-
-    public List<Card> deal() {
-
-        List<Card> hand = new ArrayList<>(STARTING_NUMBER_CARDS_HAND);
-
-        for (int i = 0; i < hand.size(); i++) {
-            hand.add(table.deck.draw());
-        }
-        return hand;
-    }
-
-    public void run () {
-
-        Player trickWinner;
-
-        setup();
-        for (int i = 0; i < table.orderOfPlay.length; i++) {
-            table.orderOfPlay[i].play();
+        // Ask each player in order to choose a card and play it. The order starts on the winner of last trick
+        for (Player player : table.orderOfPlay) {
+            table.add(player, player.play());
         }
 
         table.setLeadSuit();
-        trickWinner = findTrickWinner();
-        trickWinner.collectCards(trickCards);
+
+        trickWinner = table.findTrickWinner();
+        trickWinner.collectCards(table.getCards());
 
         // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
-        //table.advanceNextRound();
+        table.setupOrderForNextTrick(trickWinner);
 
-        /**while (!deck.isEmpty()) {
-            for (Player player : sequence) {
-                trickCards.add(player.play());
-            }
-            sequence.setLeadSuit();
+        return trickWinner;
+    }
 
-            trickWinner = findTrickWinner();
-            trickWinner.collectCards(trickCards);
+    public Player run () {
 
-        // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
-            sequence.advanceNextRound();
-        }**/
+        Player trickWinner = null;
+        Player gameWinner = null;
+
+        setup();
+
+        trickWinner = runTrick();
+        table.resetSequence();
+
+        while(!table.deck.isEmpty()) {
+
+            table.dealAllPlayers();
+            trickWinner = runTrick();
+            table.resetSequence();
+        }
+
+        // Last 3 tricks of the game, in which each player plays each of its remaining cards
+        for (int count = STARTING_NUMBER_CARDS_HAND; count > 0; count--) {
+            table.dealAllPlayers();
+            trickWinner = runTrick();
+            table.resetSequence();
+        }
+
+        gameWinner = findGameWinner();
+
+        return gameWinner;
     }
 
     private Player findGameWinner() {
