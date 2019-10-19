@@ -41,7 +41,7 @@ public class Game {
         void setOrderFor (Player player, int order) {
 
             if (order > 0 && order < NUMBER_PLAYERS) {
-                orderOfPlay.add(order - 1, player);
+                orderOfPlay.add(order, player);
             }
         }
 
@@ -54,9 +54,9 @@ public class Game {
 
             Iterator<Pick> iterator = iterator();
             List<Pick> picks = new LinkedList<>();
-            Pick nextPick;
+            Pick nextPick = null;
 
-            while (iterator().hasNext()) {
+            while (iterator.hasNext()) {
                 nextPick = iterator.next();
                 if (nextPick.getCard().getSuit().equals(suit)) {
                     picks.add(nextPick);
@@ -128,21 +128,26 @@ public class Game {
             sequence.clear();
         }
 
-        public List<Card> deal() {
+        private List<Card> dealAll() {
 
             List<Card> hand = new ArrayList<>(STARTING_NUMBER_CARDS_HAND);
 
-            for (int i = 0; i < hand.size(); i++) {
+            for (int i = 0; i < STARTING_NUMBER_CARDS_HAND; i++) {
                 hand.add(table.deck.draw());
             }
             return hand;
+        }
+
+        private Card dealOne() {
+
+            return deck.draw();
         }
 
         private void dealAllPlayers() {
 
             for (int i = 0; i < orderOfPlay.size(); i++) {
 
-                orderOfPlay.get(i).take(deal());
+                orderOfPlay.get(i).take(dealOne());
             }
         }
 
@@ -183,26 +188,38 @@ public class Game {
         int turn = Randomizer.getRandom(NUMBER_PLAYERS) + 1;
 
         if (turn == 1) {
-            table.setOrderFor(player1, 1);
-            table.setOrderFor(player2, 2);
-            player1.take(table.deal());
-            player2.take(table.deal());
+            table.orderOfPlay.add(player1);
+            table.orderOfPlay.add(player2);
+            player1.take(table.dealAll());
+            player2.take(table.dealAll());
         } else {
-            table.setOrderFor(player1, 2);
-            table.setOrderFor(player2, 1);
-            player2.take(table.deal());
-            player1.take(table.deal());
+            table.orderOfPlay.add(player2);
+            table.orderOfPlay.add(player1);
+            player2.take(table.dealAll());
+            player1.take(table.dealAll());
         }
 
         table.setBriscola();
     }
 
-    public Player runTrick() {
+    private void runTrick() {
 
         Player trickWinner = null;
+        Iterator<Player> playerIterator = table.orderOfPlay.listIterator();
+        Player player = null;
 
-        // Ask each player in order to choose a card and play it. The order starts on the winner of last trick
-        for (Player player : table.orderOfPlay) {
+        // Each player must draw a card from the deck
+
+        // Ask each player in order to choose a card from their hand and play it. The order starts on the winner of last trick
+        /**while (playerIterator.hasNext()) {
+
+            player = playerIterator.next();
+            table.add(player, player.play());
+        }*/
+
+        for (int i = 0; i < table.orderOfPlay.size(); i++) {
+
+            player = table.orderOfPlay.get(i);
             table.add(player, player.play());
         }
 
@@ -213,31 +230,29 @@ public class Game {
 
         // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
         table.setupOrderForNextTrick(trickWinner);
-
-        return trickWinner;
+        System.out.println("Completed run trick");
     }
 
     public Player run () {
 
-        Player trickWinner = null;
         Player gameWinner = null;
 
         setup();
 
-        trickWinner = runTrick();
+        runTrick();
+        System.out.println("Ran run trick");
         table.resetSequence();
 
         while(!table.deck.isEmpty()) {
 
             table.dealAllPlayers();
-            trickWinner = runTrick();
+            runTrick();
             table.resetSequence();
         }
 
         // Last 3 tricks of the game, in which each player plays each of its remaining cards
         for (int count = STARTING_NUMBER_CARDS_HAND; count > 0; count--) {
-            table.dealAllPlayers();
-            trickWinner = runTrick();
+            runTrick();
             table.resetSequence();
         }
 

@@ -27,16 +27,17 @@ public abstract class Player {
     }
 
     public void take(List<Card> hand) {
-        this.hand = hand;
+
+        this.hand.addAll(hand);
+    }
+
+    public void take(Card card) {
+
+        hand.add(card);
     }
 
     public abstract Card play();
 
-    public void draw(Deck deck) {
-
-        Card card = deck.draw();
-        hand.add(card);
-    }
 
     public int countPoints() {
 
@@ -48,5 +49,8 @@ public abstract class Player {
         pile.place(playedCards);
     }
 
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

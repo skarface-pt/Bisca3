@@ -20,8 +20,8 @@ public class CardFactory {
         Card.Suit[] suits = Card.Suit.values();
         Card.Rank[] ranks = Card.Rank.values();
 
-        for (int i = suits.length; i > 0; i--) {
-            for (int j = ranks.length; j > 0; j--) {
+        for (int i = suits.length - 1; i > 0; i--) {
+            for (int j = ranks.length - 1; j > 0; j--) {
                 card = new Card(ranks[j], suits[i]);
                 deck.place(card);
             }
