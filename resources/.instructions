@@ -1,0 +1,31 @@
+INÍCIO
+
+São distrubuídas três cartas a cada jogador.
+
+Uma carta é colocada com a face para cima. Este carta é a Bisca ou Trunfo. 
+
+
+O JOGO
+
+O primeiro jogador joga uma carta para a mesa e o seu naipe será usado como referência dominante.
+
+O segundo jogador joga uma carta para a mesa para ser comparada com a referência.
+
+Se for jogado trunfo, o vencedor será o jogador que o jogou o trunfo de maior valor, 
+de acordo com a seguinte escala: A, 7, K, J, Q, 6, 5, 4, 3, 2.
+
+Se não for jogado trunfo, o vencedor é o jogador que jogou a carta com o maior valor do naipe dominante.
+
+O vencedor recolhe as cartas da mesa e inicia a próxima jogada.
+
+O jogo termina quando não houverem mais cartas para jogar.
+
+O vencedor do jogo será o jogador com maior número de pontos recolhido, segundo a seguinte escala:
+
+A = 11 pontos;
+7 = 10 pontos;
+K = 4 pontos;
+J = 3 pontos;
+Q = 2 pontos;
+6, 5, 4, 3, 2 não valem pontos.
+
