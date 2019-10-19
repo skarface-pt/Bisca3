@@ -18,4 +18,8 @@ public class CardStack {
     public boolean isEmpty() {
         return stack.isEmpty();
     }
+
+    public int getNumberOfCards() {
+        return stack.size();
+    }
 }

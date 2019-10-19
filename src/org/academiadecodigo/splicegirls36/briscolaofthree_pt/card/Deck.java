@@ -13,4 +13,20 @@ public class Deck extends CardStack {
 
         return stack.pop();
     }
+
+    public void addToBottom (Card briscola) {
+
+        stack.addFirst(briscola);
+    }
+
+    @Override
+    public String toString() {
+
+        String result = "\n Deck: \n";
+        for (Card card : stack) {
+            result += " " + card + " ";
+        }
+        result += " size of " + this.getNumberOfCards() + "\n";
+        return result;
+    }
 }

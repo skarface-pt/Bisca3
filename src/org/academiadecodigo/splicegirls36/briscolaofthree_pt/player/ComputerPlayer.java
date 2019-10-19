@@ -12,7 +12,7 @@ public class ComputerPlayer extends Player {
     @Override
     public Card play() {
 
-        Card pick = super.hand.get(Randomizer.getRandom(hand.size()));
+        Card pick = super.hand.remove(Randomizer.getRandom(hand.size()));
         return pick;
 
     }

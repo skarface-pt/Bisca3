@@ -51,6 +51,19 @@ public abstract class Player {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.name + " has a hand of " + hand + "\n and a pile of " + pile + "\n";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String printHand() {
+
+        return hand.toString();
+    }
+
+    public int getHandSize() {
+        return hand.size();
     }
 }

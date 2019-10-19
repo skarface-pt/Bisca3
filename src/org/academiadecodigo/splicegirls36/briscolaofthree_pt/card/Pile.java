@@ -18,4 +18,15 @@ public class Pile extends CardStack {
             stack.push(card);
         }
     }
+
+    @Override
+    public String toString() {
+
+        String result = "\n Pile: \n";
+        for (Card card : stack) {
+            result += " " + card + " ";
+        }
+        result += " adds up to " + countPoints() + " points \n";
+        return result;
+    }
 }

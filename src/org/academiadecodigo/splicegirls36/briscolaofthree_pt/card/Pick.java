@@ -20,4 +20,9 @@ public class Pick {
     public Card getCard() {
         return card;
     }
+
+    public String toString() {
+
+        return "Player " + player + " played " + card + ".\n";
+    }
 }

@@ -38,13 +38,6 @@ public class Game {
             sequence.add(new Pick(player, card));
         }
 
-        void setOrderFor (Player player, int order) {
-
-            if (order > 0 && order < NUMBER_PLAYERS) {
-                orderOfPlay.add(order, player);
-            }
-        }
-
         @Override
         public Iterator<Pick> iterator() {
             return sequence.iterator();
@@ -76,6 +69,7 @@ public class Game {
 
         private void setBriscola() {
             this.briscola = deck.draw();
+            this.deck.addToBottom(briscola);
             this.trumpSuit = briscola.getSuit();
         }
 
@@ -144,10 +138,14 @@ public class Game {
         }
 
         private void dealAllPlayers() {
+            Card card;
+            Iterator<Player> iterator = orderOfPlay.listIterator();
 
-            for (int i = 0; i < orderOfPlay.size(); i++) {
+            while (iterator.hasNext()) {
 
-                orderOfPlay.get(i).take(dealOne());
+                card = dealOne();
+                iterator.next().take(card);
+                System.out.println(card);
             }
         }
 
@@ -175,6 +173,18 @@ public class Game {
             }
         }
 
+        @Override
+        public String toString() {
+            return "In the table, there is a " + deck + " The briscola is " + briscola + "\n The trump suit is " + trumpSuit + "\n";
+        }
+
+        private String printOrderOfPlay() {
+            String result = "";
+            for (Player player : orderOfPlay) {
+                result += " " + player.getName() + " ";
+            }
+            return result;
+        }
     }
 
     public Game () {
@@ -200,6 +210,8 @@ public class Game {
         }
 
         table.setBriscola();
+
+        System.out.println("The order of play at the 1st turn is " + table.printOrderOfPlay() + "\n");
     }
 
     private void runTrick() {
@@ -220,27 +232,36 @@ public class Game {
         for (int i = 0; i < table.orderOfPlay.size(); i++) {
 
             player = table.orderOfPlay.get(i);
+            System.out.println("Player " + player.getName() + " has a hand of " + player.printHand() + "\n");
             table.add(player, player.play());
+            System.out.println("Player " + player + " played " + table.sequence.get(table.sequence.size() - 1).getCard() + "\n");
         }
 
         table.setLeadSuit();
+        System.out.println("The lead suit is " + table.leadSuit);
 
         trickWinner = table.findTrickWinner();
         trickWinner.collectCards(table.getCards());
 
+        System.out.println(trickWinner);
+
         // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
         table.setupOrderForNextTrick(trickWinner);
-        System.out.println("Completed run trick");
+        System.out.println("Completed trick. The trick winner is " + trickWinner.getName() + "\n" +
+                "The next trick will be played in the following order: \n" + table.printOrderOfPlay() + "\n");
     }
 
     public Player run () {
+
+        int count = 0;
 
         Player gameWinner = null;
 
         setup();
 
+        System.out.println(table);
+
         runTrick();
-        System.out.println("Ran run trick");
         table.resetSequence();
 
         while(!table.deck.isEmpty()) {
@@ -250,8 +271,11 @@ public class Game {
             table.resetSequence();
         }
 
+
+        System.out.println(player1.printHand());
+        System.out.println(player2.printHand());
         // Last 3 tricks of the game, in which each player plays each of its remaining cards
-        for (int count = STARTING_NUMBER_CARDS_HAND; count > 0; count--) {
+        while (player1.getHandSize() > 0) {
             runTrick();
             table.resetSequence();
         }
@@ -279,4 +303,8 @@ public class Game {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return player1 + " vs " + player2;
+    }
 }
