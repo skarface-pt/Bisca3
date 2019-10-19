@@ -1,0 +1,308 @@
+
+import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
+import java.security.PublicKey;
+
+
+//  Method to produce and return an array with forty cards
+    //  **********************************************************************************************
+    public static GraphicCard[] newGraphicCard() {
+        GraphicCard[] graphicCards = new GraphicCard[40];
+        int index = 0;
+        String imageURL;
+        for(Suit suit: Suit.values()) {
+            for (Rank rank : Rank.values()) {
+                imageURL = "PNG/" + rank.getRankChar() + suit.getSuitChar() + ".png";
+                graphicCards[index] = new GraphicCard(suit, rank, imageURL, GraphicPosition.DECK);
+            }
+        }
+        return graphicCards;
+    }
+
+
+// Recycled code:  GraphicCard card1 = new GraphicCard(Suit.DIAMONDS,Rank.KING, "PNG/KD.png", GraphicPosition.TABLE_1);
+//picture.translate(finalPosition.getX() - picture.getX(), finalPosition.getY() - picture.getY());
+
+        int delay = 2000;
+
+
+        Rectangle rect1 = new Rectangle(10, 10, 1500, 900);
+        rect1.setColor(Color.LIGHT_GRAY);
+        rect1.fill();
+
+        Picture pic2 = new Picture(300,30,"PNG/KC.png");
+        pic2.draw();
+        Thread.sleep(1000);
+
+
+        for(int i = 0; i < 500; i++ ) {
+            int xMove = 1;//(GraphicPosition.PLAYER_B_CARD_3.getPixelX() - pic2.getX()) / 10;
+            int yMove = 1;//(GraphicPosition.PLAYER_B_CARD_3.getPixelY() - pic2.getY()) / 10;
+            pic2.translate(xMove, yMove);
+            Thread.sleep(1);
+        }
+
+
+
+
+
+*/
+
+        /*    Picture pic = new Picture(30, 30, "PNG/2C.png");
+        pic.draw();
+
+
+        Thread.sleep(delay);
+        Picture pic2 = new Picture(300,30,"PNG/KC.png");
+        pic2.draw();
+
+        Thread.sleep(delay);
+        pic.delete();
+
+        Thread.sleep(delay);
+        pic.translate(100,200);
+
+        Thread.sleep(delay);
+        pic.draw();
+
+
+*/
+
+/*
+
+
+
+
+        while (true) {
+
+            // Pause for a while
+            Thread.sleep(delay);
+
+            // Move all cars
+            moveAllCars();
+
+            // Check for crashes
+            checkCrashes();
+
+            // Update screen
+            Field.draw(cars);
+
+            // Set number of throws
+            setNumberOfThrows();
+
+        }
+
+
+
+
+
+
+
+        Graphic gameGraphic = new Graphic();
+
+
+
+
+        String[] cards = new String[41];
+        cards[0] = "PNG/2C.png";
+        cards[1] = "PNG/3C.png";
+        cards[2] = "PNG/4C.png";
+        cards[3] = "PNG/5C.png";
+        cards[4] = "PNG/6C.png";
+        cards[5] = "PNG/7C.png";
+        cards[6] = "PNG/AC.png";
+        cards[6] = "PNG/JC.png";
+        cards[7] = "PNG/KC.png";
+        cards[8] = "PNG/QC.png";
+        cards[9] = "PNG/Cover.png";
+
+        gameGraphic.positionOne(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionTwo(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionThree(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionFour(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionFive(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionSix(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionSeven(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionEight(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionNine(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionTen(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionEleven(cards[(int) (Math.random() * 10)]);
+        gameGraphic.positionTwelve(cards[(int) (Math.random() * 10)]);
+
+        gameGraphic.positionTwelve(cards[9]);
+
+
+public class Graphics {
+
+    private int canvasWidth = 1500;
+    private int canvasHigh = 900;
+    Cards size =  117  x  179
+
+
+    public void init() {
+        Rectangle rect1 = new Rectangle(10, 10, canvasWidth, canvasHigh);
+        rect1.setColor(Color.LIGHT_GRAY);
+        rect1.fill();
+    }
+
+    public void positionOne(String card) {
+        Picture pictureOne = new Picture(538, 30, card);
+        pictureOne.draw();
+    }
+
+    public void positionTwo(String card) {
+        Picture pictureTwo = new Picture(688, 30, card);
+        pictureTwo.draw();
+    }
+
+    public void positionThree(String card) {
+        Picture pictureThree = new Picture(838, 30, card);
+        pictureThree.draw();
+    }
+
+    public void positionFour(String card) {
+        Picture pictureFour = new Picture(688, 30, card);
+        pictureFour.draw();
+    }
+
+    public void positionFive(String card) {
+        Picture pictureFive = new Picture(538, 30, card);
+        pictureFive.draw();
+    }
+
+    public void positionSix(String card) {
+        Picture pictureSix = new Picture(688, 30, card);
+        pictureSix.draw();
+    }
+
+    public void positionSeven(String card) {
+        Picture pictureSeven = new Picture(838, 30, card);
+        pictureSeven.draw();
+    }
+
+    public void positionEight(String card) {
+        Picture pictureEight = new Picture(688, 30, card);
+        pictureEight.draw();
+    }
+
+    public void positionNine(String card) {
+        Picture pictureNine = new Picture(538, 30, card);
+        pictureNine.draw();
+    }
+
+    public void positionTen(String card) {
+        Picture pictureTen = new Picture(688, 30, card);
+        pictureTen.draw();
+    }
+
+    public void positionEleven(String card) {
+        Picture pictureEleven = new Picture(838, 30, card);
+        pictureEleven.draw();
+    }
+
+    public void positionTwelve(String card) {
+        Picture pictureTwelve = new Picture(688, 30, card);
+        pictureTwelve.draw();
+    }
+
+
+        Picture pic = new Picture(688, 30, "PNG/1.png");
+        pic.draw();
+
+        Picture pic2 = new Picture(538, 30, "PNG/2.png");
+        pic2.draw();
+
+        Picture pic3 = new Picture(838, 30, "PNG/3.png");
+        pic3.draw();
+
+        Picture pic4 = new Picture(340, 330, "PNG/4.png");
+        pic4.draw();
+
+        Picture pic5 = new Picture(300, 370, "PNG/RedCover.png");
+        pic5.draw();
+
+        Picture pic6 = new Picture(838, 370, "PNG/RedCover.png");
+        pic5.draw();
+    }
+
+}
+
+public class SimpleGraphics {
+
+    public static void main(String[] args) {
+
+        Graphics g = new Graphics();
+        g.init();
+
+
+
+        int canvasWidth = 1500;
+        int canvasHigh = 900;
+
+        Rectangle rect1 = new Rectangle(10, 10, canvasWidth, canvasHigh);
+        Rectangle rect2 = new Rectangle(538, 30, 115, 160);
+        Rectangle rect3 = new Rectangle(693, 30, 115, 160);
+        Rectangle rect4 = new Rectangle(838, 30, 115, 160);
+        Rectangle rect5 = new Rectangle(1327, 30, 115, 160);
+        Rectangle rect6 = new Rectangle(60, 370, 115, 160);
+        Rectangle rect7 = new Rectangle(620, 370, 115, 160);
+        Rectangle rect8 = new Rectangle(765, 370, 115, 160);
+        Rectangle rect9 = new Rectangle(90, 400, 115, 160);
+        Rectangle rect10 = new Rectangle(538, 710, 115, 160);
+        Rectangle rect11 = new Rectangle(693, 710, 115, 160);
+        Rectangle rect12 = new Rectangle(838, 710, 115, 160);
+        Rectangle rect13 = new Rectangle(1327, 710, 115, 160);
+
+
+        rect2.setColor(Color.BLUE);
+        rect3.setColor(Color.BLUE);
+        rect4.setColor(Color.BLUE);
+        rect5.setColor(Color.BLUE);
+        rect7.setColor(Color.BLUE);
+        rect8.setColor(Color.BLUE);
+        rect9.setColor(Color.WHITE);
+        rect10.setColor(Color.BLUE);
+        rect11.setColor(Color.BLUE);
+        rect12.setColor(Color.BLUE);
+        rect13.setColor(Color.BLUE);
+
+
+        rect2.fill();
+        rect3.fill();
+        rect4.fill();
+        rect5.fill();
+        rect6.fill();
+        rect7.fill();
+        rect8.fill();
+        rect9.fill();
+        rect10.fill();
+        rect11.fill();
+        rect12.fill();
+        rect13.fill();
+
+        Picture pic = new Picture(60, 370, "/Users/codecadet/Documents/briscolaofthree_pt/PNG/little.png");
+        Picture pic = new Picture(688, 30, "PNG/1.png");
+        pic.draw();
+
+        Picture pic2 = new Picture(538, 30, "PNG/2.png");
+        pic2.draw();
+
+        Picture pic3 = new Picture(838, 30, "PNG/3.png");
+        pic3.draw();
+
+        Picture pic4 = new Picture(340, 330, "PNG/4.png");
+        pic4.draw();
+
+        Picture pic5 = new Picture(300, 370, "PNG/RedCover.png");
+        pic5.draw();
+
+        Picture pic6 = new Picture(838, 370, "PNG/RedCover.png");
+        pic5.draw();
+
+
+        System.out.println(pic.pixels());
+
+
+    }
+
