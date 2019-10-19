@@ -18,12 +18,12 @@ public class Game {
     private Player player1;
     private Player player2;
     private Table table;
-    private Player
 
     private class Table implements Iterable<Pick> {
 
         private Card.Suit leadSuit;
         private List<Pick> sequence;
+        private Player[] orderOfPlay;
         private Card briscola;
         private Card.Suit trumpSuit;
         private Deck deck;
@@ -31,12 +31,19 @@ public class Game {
         Table() {
             this.deck = CardFactory.createDeck();
             sequence = new LinkedList<>();
+            orderOfPlay = new Player[NUMBER_PLAYERS];
         }
 
-        void add (Pick pick) {
-            sequence.add(pick);
+        void add (Player player, Card card) {
+            sequence.add(new Pick(player, card));
         }
 
+        void setOrderFor (Player player, int order) {
+
+            if (order > 0 && order < NUMBER_PLAYERS) {
+                orderOfPlay[order] = player;
+            }
+        }
 
         @Override
         public Iterator<Pick> iterator() {
@@ -138,7 +145,6 @@ public class Game {
 
     public Game () {
 
-
         this.player1 = new ComputerPlayer("Computer1");
         this.player2 = new ComputerPlayer("Computer2");
         this.table = new Table();
@@ -148,15 +154,15 @@ public class Game {
         int turn = Randomizer.getRandom(NUMBER_PLAYERS) + 1;
 
         if (turn == 1) {
+            table.setOrderFor(player1, 1);
+            table.setOrderFor(player2, 2);
             player1.take(this.deal());
             player2.take(this.deal());
-            table.add(player1, );
-            table.add(player2);
         } else {
+            table.setOrderFor(player1, 2);
+            table.setOrderFor(player2, 1);
             player2.take(this.deal());
             player1.take(this.deal());
-            table.add(player2);
-            table.add(player1);
         }
 
         table.setBriscola();
@@ -174,7 +180,7 @@ public class Game {
         List<Card> hand = new ArrayList<>(STARTING_NUMBER_CARDS_HAND);
 
         for (int i = 0; i < hand.size(); i++) {
-            hand.add(deck.draw());
+            hand.add(table.deck.draw());
         }
         return hand;
     }
@@ -182,13 +188,12 @@ public class Game {
     public void run () {
 
         Player trickWinner;
-        List<Card> trickCards = new ArrayList<>();
 
         setup();
-
-        for (Player player : table) {
-            trickCards.add(player.play());
+        for (int i = 0; i < table.orderOfPlay.length; i++) {
+            table.orderOfPlay[i].play();
         }
+
         table.setLeadSuit();
         trickWinner = findTrickWinner();
         trickWinner.collectCards(trickCards);
