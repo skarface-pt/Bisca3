@@ -1,13 +1,18 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt;
 
+import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.*;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.graphics.*;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.ComputerPlayer;
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.HumanPlayer;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.Player;
 
 import java.util.*;
 
-public class Game {
+public class Game implements KeyboardHandler {
 
     // Game constants
     public static final int STARTING_NUMBER_CARDS_HAND = 3;
@@ -20,10 +25,76 @@ public class Game {
     private Player player2;
     private Table table;
 
+    private boolean humanPicked = false;
+    private GraphicPosition humanPick;
+
     private GraphicPosition gPos1;
     private GraphicPosition gPos2;
 
     private Graphic graphic;
+
+    private void keyBoardInit() {
+
+        Keyboard keyboard = new Keyboard(this);
+        KeyboardEvent [] events = new KeyboardEvent[3];
+
+        for (int i = 0; i < events.length; i++) {
+            events[i] = new KeyboardEvent();
+
+        }
+
+        events[0].setKey(KeyboardEvent.KEY_1);
+        events[0].setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+
+        events[1].setKey(KeyboardEvent.KEY_2);
+        events[1].setKeyboardEventType((KeyboardEventType.KEY_PRESSED));
+
+        events[2].setKey(KeyboardEvent.KEY_3);
+        events[2].setKeyboardEventType((KeyboardEventType.KEY_PRESSED));
+
+
+        for (int i = 0; i < events.length; i++) {
+            keyboard.addEventListener((events[i]));
+
+        }
+
+
+    }
+
+    @Override
+    public void keyPressed(KeyboardEvent keyboardEvent) {
+
+            switch (keyboardEvent.getKey()) {
+
+                case KeyboardEvent.KEY_1:
+
+                    humanPick = GraphicPosition.PLAYER_A_CARD_1;
+                    System.out.println("Picked 1" + humanPick);
+                    humanPicked = true;
+                    break;
+
+                case KeyboardEvent.KEY_2:
+
+                    humanPick = GraphicPosition.PLAYER_A_CARD_2;
+                    System.out.println("Picked 2" + humanPick);
+                    humanPicked = true;
+                    break;
+
+                case KeyboardEvent.KEY_3:
+
+                    humanPick = GraphicPosition.PLAYER_A_CARD_3;
+                    System.out.println("Picked 3" + humanPick);
+                    humanPicked = true;
+                    break;
+                default:
+                    return;
+            }
+    }
+
+    @Override
+    public void keyReleased(KeyboardEvent keyboardEvent) {
+
+    }
 
     private class Table implements Iterable<Pick> {
 
@@ -81,9 +152,9 @@ public class Game {
 
         private void setupOrderForNextTrick(Player trickWinner) {
 
-            int trickWinnerPos = sequence.indexOf(trickWinner);
+            int trickWinnerPos = orderOfPlay.indexOf(trickWinner);
 
-            Collections.rotate(sequence, -trickWinnerPos);
+            Collections.rotate(orderOfPlay, -trickWinnerPos);
         }
 
         private Pick findHighestPick(Card.Suit suit) {
@@ -107,6 +178,10 @@ public class Game {
 
                 leadPick = findHighestPick(leadSuit);
                 return leadPick.getPlayer();
+            }
+
+            if (trumpPicks.size() ==  1) {
+                return trumpPicks.get(0).getPlayer();
             }
 
             leadPick = findHighestPick(trumpSuit);
@@ -209,10 +284,11 @@ public class Game {
 
     public Game () {
 
-        this.player1 = new ComputerPlayer("Computer1");
-        this.player2 = new ComputerPlayer("Computer2");
+        this.player1 = new HumanPlayer("You", this);
+        this.player2 = new ComputerPlayer("Computer");
         this.table = new Table();
         this.graphic = new Graphic();
+        keyBoardInit();
     }
 
     private void showGraphicBriscola() {
@@ -399,6 +475,8 @@ public class Game {
 
         System.out.println(player1.printHand());
         System.out.println(player2.printHand());
+
+        graphic.getCoverCards().get(0).delete();
         // Last 3 tricks of the game, in which each player plays each of its remaining cards
         while (player1.getHandSize() > 0) {
             runTrick();
@@ -426,6 +504,18 @@ public class Game {
         }
         System.err.println("This line should never be reached, because by the very rules of the game a win or a tie are the only possible outcomes");
         return null;
+    }
+
+    public GraphicPosition getHumanPick() {
+        return humanPick;
+    }
+
+    public boolean hasHumanPicked() {
+        return this.humanPicked;
+    }
+
+    public void setHumanPicked(boolean picked) {
+        this.humanPicked = picked;
     }
 
     @Override
