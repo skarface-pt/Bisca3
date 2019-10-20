@@ -11,10 +11,10 @@ import java.security.PublicKey;
         GraphicCard[] graphicCards = new GraphicCard[40];
         int index = 0;
         String imageURL;
-        for(Suit suit: Suit.values()) {
+        for(Suit graphicSuit: Suit.values()) {
             for (Rank rank : Rank.values()) {
-                imageURL = "PNG/" + rank.getRankChar() + suit.getSuitChar() + ".png";
-                graphicCards[index] = new GraphicCard(suit, rank, imageURL, GraphicPosition.DECK);
+                imageURL = "PNG/" + rank.getRankChar() + graphicSuit.getSuitChar() + ".png";
+                graphicCards[index] = new GraphicCard(graphicSuit, rank, imageURL, GraphicPosition.DECK);
             }
         }
         return graphicCards;

@@ -1,11 +1,12 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.graphics;
 
 import org.academiadecodigo.simplegraphics.pictures.Picture;
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Card;
 
 public class GraphicCard {
 
-    private Suit suit;
-    private Rank rank;
+    private Card.Suit graphicSuit;
+    private Card.Rank rank;
     private String imageURL;
     private Picture picture;
     private GraphicPosition initialPosition;
@@ -13,8 +14,9 @@ public class GraphicCard {
     private final int DELAY = 4; // milliseconds
     private final double ITERATIONS = 100.0; // positions along the movement
 
-    public GraphicCard(Suit suit, Rank rank, String imageURL, GraphicPosition position) {
-        this.suit = suit;
+    public GraphicCard(Card.Suit suit, Card.Rank rank, String imageURL, GraphicPosition position) {
+
+        this.graphicSuit = suit;
         this.rank = rank;
         this.imageURL = imageURL;
         this.initialPosition = position;
@@ -45,6 +47,7 @@ public class GraphicCard {
             picture.translate((int) (i * xMove) - (int) ((i - 1) * xMove), (int) (i * yMove) - (int) ((i - 1) * yMove));
             Thread.sleep(DELAY);
         }
+        initialPosition = finalPosition;
     }
 }
 

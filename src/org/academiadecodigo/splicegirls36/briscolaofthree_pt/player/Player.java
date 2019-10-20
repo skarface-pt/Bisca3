@@ -1,10 +1,7 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.player;
 
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.Game;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Card;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.CardFactory;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Deck;
-import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Pile;
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,5 +62,9 @@ public abstract class Player {
 
     public int getHandSize() {
         return hand.size();
+    }
+
+    public List<Card> getHand() {
+        return hand;
     }
 }

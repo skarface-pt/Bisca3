@@ -1,9 +1,13 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.card;
 
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.graphics.Graphic;
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.graphics.GraphicCard;
+
 public class Card {
 
     private Rank rank;
     private Suit suit;
+    private GraphicCard graphicCard;
 
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
@@ -11,22 +15,29 @@ public class Card {
     }
 
     public enum Rank {
-        TWO(0),
-        THREE(0),
-        FOUR(0),
-        FIVE(0),
-        SIX(0),
-        QUEEN(2),
-        JACK(3),
-        KING(4),
-        SEVEN(10),
-        ACE(11);
+        TWO(0, "2"),
+        THREE(0, "3"),
+        FOUR(0, "4"),
+        FIVE(0, "5"),
+        SIX(0,"6"),
+        QUEEN(2, "Q"),
+        JACK(3, "J"),
+        KING(4, "K"),
+        SEVEN(10, "7"),
+        ACE(11, "A");
 
         private int points;
 
-        Rank(int points) {
+        private String rankChar;
+
+        public String getRankChar() {
+            return rankChar;
+        }
+
+        Rank(int points, String rankChar) {
 
             this.points = points;
+            this.rankChar = rankChar;
         }
 
         int getPoints() {
@@ -43,10 +54,20 @@ public class Card {
 
     public enum Suit {
 
-        SPADES,
-        HEARTS,
-        CLUBS,
-        DIAMONDS;
+        SPADES("S"),
+        HEARTS("H"),
+        CLUBS("C"),
+        DIAMONDS("D");
+
+        Suit(String suitChar) {
+            this.suitChar = suitChar;
+        }
+
+        private String suitChar;
+
+        public String getSuitChar() {
+            return suitChar;
+        }
 
         @Override
         public String toString() {
@@ -72,5 +93,14 @@ public class Card {
 
     public Rank getRank() {
         return rank;
+    }
+
+
+    public GraphicCard getGraphicCard() {
+        return graphicCard;
+    }
+
+    public void setGraphicCard(GraphicCard graphicCard) {
+        this.graphicCard = graphicCard;
     }
 }

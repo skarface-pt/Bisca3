@@ -1,13 +1,15 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.graphics;
 
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.Card;
+
 public class AnimationTwo {
 
     AnimationTwo() throws InterruptedException {
         GraphicCard[] graphicCards = new GraphicCard[44];
         int index = 0;
-        for(Suit suit: Suit.values()) {
-            for (Rank rank : Rank.values()) {
-                graphicCards[index] = GraphicCardFactory.newGraphicCard(rank, suit);
+        for(Card.Suit graphicSuit : Card.Suit.values()) {
+            for (Card.Rank rank : Card.Rank.values()) {
+                graphicCards[index] = GraphicCardFactory.newGraphicCard(rank, graphicSuit);
                 index ++;
             }
         }
@@ -16,7 +18,6 @@ public class AnimationTwo {
         graphicCards[41] = GraphicCardFactory.newCoverCard();
         graphicCards[42] = GraphicCardFactory.newCoverCard();
         graphicCards[43] = GraphicCardFactory.newCoverCard();
-
 
         while (true) {
             for(int i = 0; i < 44; i++) {

@@ -1,6 +1,7 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt.card;
 
 import java.util.Collections;
+import java.util.List;
 
 public class Deck extends CardStack {
 
@@ -16,7 +17,7 @@ public class Deck extends CardStack {
 
     public void addToBottom (Card briscola) {
 
-        stack.addFirst(briscola);
+        stack.addLast(briscola);
     }
 
     @Override
@@ -28,5 +29,9 @@ public class Deck extends CardStack {
         }
         result += " size of " + this.getNumberOfCards() + "\n";
         return result;
+    }
+
+    public List<Card> getStack() {
+        return stack;
     }
 }

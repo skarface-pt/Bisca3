@@ -1,6 +1,7 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt;
 
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.card.*;
+import org.academiadecodigo.splicegirls36.briscolaofthree_pt.graphics.*;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.ComputerPlayer;
 import org.academiadecodigo.splicegirls36.briscolaofthree_pt.player.Player;
 
@@ -18,6 +19,11 @@ public class Game {
     private Player player1;
     private Player player2;
     private Table table;
+
+    private GraphicPosition gPos1;
+    private GraphicPosition gPos2;
+
+    private Graphic graphic;
 
     private class Table implements Iterable<Pick> {
 
@@ -144,8 +150,22 @@ public class Game {
             while (iterator.hasNext()) {
 
                 card = dealOne();
-                iterator.next().take(card);
-                System.out.println(card);
+                Player player = iterator.next();
+                player.take(card);
+                try {
+                    if (player == player1) {
+
+                        card.getGraphicCard().draw();
+                        card.getGraphicCard().move(gPos1);
+
+                    } else {
+                        card.getGraphicCard().draw();
+                        card.getGraphicCard().move(gPos2);
+                    }
+                    System.out.println(card);
+                } catch (InterruptedException e) {
+                    e.getMessage();
+                }
             }
         }
 
@@ -192,16 +212,33 @@ public class Game {
         this.player1 = new ComputerPlayer("Computer1");
         this.player2 = new ComputerPlayer("Computer2");
         this.table = new Table();
+        this.graphic = new Graphic();
+    }
+
+    private void showGraphicBriscola() {
+
+        List<GraphicCard> graphicDeck = graphic.getGraphicDeck();
+        GraphicCard graphicBriscola = table.briscola.getGraphicCard();
+        try {
+            graphicBriscola.move(GraphicPosition.TRUMP);
+        } catch (InterruptedException e) {
+            System.err.println(e.getMessage());
+        }
+        graphicBriscola.draw();
+        graphic.getCoverCards().get(0).draw();
     }
 
     private void setup() {
         int turn = Randomizer.getRandom(NUMBER_PLAYERS) + 1;
+
+        graphic.setupGraphicDeck(table.deck.getStack());
 
         if (turn == 1) {
             table.orderOfPlay.add(player1);
             table.orderOfPlay.add(player2);
             player1.take(table.dealAll());
             player2.take(table.dealAll());
+
         } else {
             table.orderOfPlay.add(player2);
             table.orderOfPlay.add(player1);
@@ -211,7 +248,79 @@ public class Game {
 
         table.setBriscola();
 
+        showGraphicBriscola();
+
+        graphicDraw(turn);
+        System.out.println(turn);
         System.out.println("The order of play at the 1st turn is " + table.printOrderOfPlay() + "\n");
+    }
+
+    private void graphicDraw(int turn) {
+
+        try {
+            if (turn == 1) {
+
+                player1.getHand().get(0).getGraphicCard().draw();
+                player1.getHand().get(0).getGraphicCard().move(GraphicPosition.PLAYER_A_CARD_1);
+
+                player1.getHand().get(1).getGraphicCard().draw();
+                player1.getHand().get(1).getGraphicCard().move(GraphicPosition.PLAYER_A_CARD_2);
+
+                player1.getHand().get(2).getGraphicCard().draw();
+                player1.getHand().get(2).getGraphicCard().move(GraphicPosition.PLAYER_A_CARD_3);
+
+                player2.getHand().get(0).getGraphicCard().draw();
+                player2.getHand().get(0).getGraphicCard().move(GraphicPosition.PLAYER_B_CARD_1);
+
+                player2.getHand().get(1).getGraphicCard().draw();
+                player2.getHand().get(1).getGraphicCard().move(GraphicPosition.PLAYER_B_CARD_2);
+
+                player2.getHand().get(2).getGraphicCard().draw();
+                player2.getHand().get(2).getGraphicCard().move(GraphicPosition.PLAYER_B_CARD_3);
+
+                /**graphic.getCoverCards().get(1).draw();
+                graphic.getCoverCards().get(1).move(GraphicPosition.PLAYER_B_CARD_1);
+
+                graphic.getCoverCards().get(2).draw();
+                graphic.getCoverCards().get(2).move(GraphicPosition.PLAYER_B_CARD_2);
+
+                graphic.getCoverCards().get(3).draw();
+                graphic.getCoverCards().get(3).move(GraphicPosition.PLAYER_B_CARD_3);*/
+
+            } else {
+
+                /**graphic.getCoverCards().get(1).draw();
+                graphic.getCoverCards().get(1).move(GraphicPosition.PLAYER_B_CARD_1);
+
+                graphic.getCoverCards().get(2).draw();
+                graphic.getCoverCards().get(2).move(GraphicPosition.PLAYER_B_CARD_2);
+
+                graphic.getCoverCards().get(3).draw();
+                graphic.getCoverCards().get(3).move(GraphicPosition.PLAYER_B_CARD_3);*/
+
+                player2.getHand().get(0).getGraphicCard().draw();
+                player2.getHand().get(0).getGraphicCard().move(GraphicPosition.PLAYER_B_CARD_1);
+
+                player2.getHand().get(1).getGraphicCard().draw();
+                player2.getHand().get(1).getGraphicCard().move(GraphicPosition.PLAYER_B_CARD_2);
+
+                player2.getHand().get(2).getGraphicCard().draw();
+                player2.getHand().get(2).getGraphicCard().move(GraphicPosition.PLAYER_B_CARD_3);
+
+                player1.getHand().get(0).getGraphicCard().draw();
+                player1.getHand().get(0).getGraphicCard().move(GraphicPosition.PLAYER_A_CARD_1);
+
+                player1.getHand().get(1).getGraphicCard().draw();
+                player1.getHand().get(1).getGraphicCard().move(GraphicPosition.PLAYER_A_CARD_2);
+
+                player1.getHand().get(2).getGraphicCard().draw();
+                player1.getHand().get(2).getGraphicCard().move(GraphicPosition.PLAYER_A_CARD_3);
+
+
+            }
+        } catch (InterruptedException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void runTrick() {
@@ -219,21 +328,27 @@ public class Game {
         Player trickWinner = null;
         Iterator<Player> playerIterator = table.orderOfPlay.listIterator();
         Player player = null;
-
-        // Each player must draw a card from the deck
+        Card card;
 
         // Ask each player in order to choose a card from their hand and play it. The order starts on the winner of last trick
-        /**while (playerIterator.hasNext()) {
-
-            player = playerIterator.next();
-            table.add(player, player.play());
-        }*/
-
         for (int i = 0; i < table.orderOfPlay.size(); i++) {
 
             player = table.orderOfPlay.get(i);
             System.out.println("Player " + player.getName() + " has a hand of " + player.printHand() + "\n");
-            table.add(player, player.play());
+            card = player.play();
+            table.add(player, card);
+            try {
+                if (player == player1) {
+                    gPos1 = card.getGraphicCard().getPosition();
+                    card.getGraphicCard().move(GraphicPosition.TABLE_1);
+                } else {
+                    gPos2 = card.getGraphicCard().getPosition();
+                    card.getGraphicCard().move(GraphicPosition.TABLE_2);
+                }
+            } catch (InterruptedException e) {
+                e.getMessage();
+            }
+
             System.out.println("Player " + player + " played " + table.sequence.get(table.sequence.size() - 1).getCard() + "\n");
         }
 
@@ -241,7 +356,20 @@ public class Game {
         System.out.println("The lead suit is " + table.leadSuit);
 
         trickWinner = table.findTrickWinner();
-        trickWinner.collectCards(table.getCards());
+        List<Card> tableCards = table.getCards();
+        trickWinner.collectCards(tableCards);
+
+        try {
+            if (trickWinner == player1) {
+                tableCards.get(0).getGraphicCard().move(GraphicPosition.PLAYER_A_PILE);
+                tableCards.get(1).getGraphicCard().move(GraphicPosition.PLAYER_A_PILE);
+            } else {
+                tableCards.get(0).getGraphicCard().move(GraphicPosition.PLAYER_B_PILE);
+                tableCards.get(1).getGraphicCard().move(GraphicPosition.PLAYER_B_PILE);
+            }
+        } catch (InterruptedException e) {
+            System.err.println(e.getMessage());
+        }
 
         System.out.println(trickWinner);
 
@@ -252,8 +380,6 @@ public class Game {
     }
 
     public Player run () {
-
-        int count = 0;
 
         Player gameWinner = null;
 
@@ -270,7 +396,6 @@ public class Game {
             runTrick();
             table.resetSequence();
         }
-
 
         System.out.println(player1.printHand());
         System.out.println(player2.printHand());
