@@ -11,7 +11,7 @@ import java.util.concurrent.RecursiveAction;
 
 public class Graphic {
 
-    public static final String PICTURES_PATH = "./resources/card_pictures/";
+    public static final String PICTURES_PATH = "resources/card_pictures/";
     public static final String PICTURE_EXTENSION = ".png";
     public static final int NUMBER_COVER_CARDS = 6;
 

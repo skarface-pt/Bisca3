@@ -1,5 +1,7 @@
 package org.academiadecodigo.splicegirls36.briscolaofthree_pt;
 
+import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -36,7 +38,7 @@ public class Game implements KeyboardHandler {
     private void keyBoardInit() {
 
         Keyboard keyboard = new Keyboard(this);
-        KeyboardEvent [] events = new KeyboardEvent[3];
+        KeyboardEvent [] events = new KeyboardEvent[4];
 
         for (int i = 0; i < events.length; i++) {
             events[i] = new KeyboardEvent();
@@ -51,6 +53,9 @@ public class Game implements KeyboardHandler {
 
         events[2].setKey(KeyboardEvent.KEY_3);
         events[2].setKeyboardEventType((KeyboardEventType.KEY_PRESSED));
+
+        events[3].setKey(KeyboardEvent.KEY_SPACE);
+        events[3].setKeyboardEventType((KeyboardEventType.KEY_PRESSED));
 
 
         for (int i = 0; i < events.length; i++) {
@@ -87,7 +92,7 @@ public class Game implements KeyboardHandler {
                     humanPicked = true;
                     break;
                 default:
-                    return;
+                    System.exit(0);
             }
     }
 
@@ -485,6 +490,8 @@ public class Game implements KeyboardHandler {
 
         gameWinner = findGameWinner();
 
+        printWinner(gameWinner);
+
         return gameWinner;
     }
 
@@ -516,6 +523,15 @@ public class Game implements KeyboardHandler {
 
     public void setHumanPicked(boolean picked) {
         this.humanPicked = picked;
+    }
+
+    public String printWinner(Player winner) {
+        Text text;
+        text = new Text(GraphicPosition.TABLE_1.getX(),GraphicPosition.TABLE_1.getY(), winner.getName() + " WON!!!");
+        text.grow(300, 300);
+        text.draw();
+        text.setColor(Color.RED);
+        return winner.getName();
     }
 
     @Override
