@@ -22,7 +22,7 @@ public class HumanPlayer extends Player {
         int index = 0;
 
         while (!game.hasHumanPicked()) {
-            System.out.println("Pick something please!");
+            // System.out.println("Pick something please!");
         }
 
         pick = game.getHumanPick();

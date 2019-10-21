@@ -43,7 +43,7 @@ public class GraphicCardFactory {
 
     //  Method to produce and return the covered card
     public static GraphicCard newCoverCard() {
-        GraphicCard coverCard = new GraphicCard(Card.Suit.HEARTS, Card.Rank.TWO, Graphic.PICTURES_PATH + "/Cover" + Graphic.PICTURE_EXTENSION, GraphicPosition.DECK);
+        GraphicCard coverCard = new GraphicCard(Card.Suit.HEARTS, Card.Rank.TWO, Graphic.PICTURES_PATH + "Cover" + Graphic.PICTURE_EXTENSION, GraphicPosition.DECK);
         return coverCard;
     }
 

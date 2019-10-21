@@ -11,6 +11,7 @@
         <property name="classes.dir" value="${build.dir}/classes" />
         <property name="lib.dir" value="lib" />
         <property name="resources.dir" value="resources"/>
+        <property name="jar.dir" value="jar"/>
         <path id="classpath">
             <fileset dir="${lib.dir}" includes="**/*.jar" />
         </path>

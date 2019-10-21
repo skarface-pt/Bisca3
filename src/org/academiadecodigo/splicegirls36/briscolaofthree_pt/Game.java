@@ -74,21 +74,21 @@ public class Game implements KeyboardHandler {
                 case KeyboardEvent.KEY_1:
 
                     humanPick = GraphicPosition.PLAYER_A_CARD_1;
-                    System.out.println("Picked 1" + humanPick);
+                    // System.out.println("Picked 1" + humanPick);
                     humanPicked = true;
                     break;
 
                 case KeyboardEvent.KEY_2:
 
                     humanPick = GraphicPosition.PLAYER_A_CARD_2;
-                    System.out.println("Picked 2" + humanPick);
+                    // System.out.println("Picked 2" + humanPick);
                     humanPicked = true;
                     break;
 
                 case KeyboardEvent.KEY_3:
 
                     humanPick = GraphicPosition.PLAYER_A_CARD_3;
-                    System.out.println("Picked 3" + humanPick);
+                    // System.out.println("Picked 3" + humanPick);
                     humanPicked = true;
                     break;
                 default:
@@ -242,7 +242,7 @@ public class Game implements KeyboardHandler {
                         card.getGraphicCard().draw();
                         card.getGraphicCard().move(gPos2);
                     }
-                    System.out.println(card);
+                    // System.out.println(card);
                 } catch (InterruptedException e) {
                     e.getMessage();
                 }
@@ -332,8 +332,8 @@ public class Game implements KeyboardHandler {
         showGraphicBriscola();
 
         graphicDraw(turn);
-        System.out.println(turn);
-        System.out.println("The order of play at the 1st turn is " + table.printOrderOfPlay() + "\n");
+        // System.out.println(turn);
+        // System.out.println("The order of play at the 1st turn is " + table.printOrderOfPlay() + "\n");
     }
 
     private void graphicDraw(int turn) {
@@ -415,7 +415,7 @@ public class Game implements KeyboardHandler {
         for (int i = 0; i < table.orderOfPlay.size(); i++) {
 
             player = table.orderOfPlay.get(i);
-            System.out.println("Player " + player.getName() + " has a hand of " + player.printHand() + "\n");
+            // System.out.println("Player " + player.getName() + " has a hand of " + player.printHand() + "\n");
             card = player.play();
             table.add(player, card);
             try {
@@ -430,11 +430,11 @@ public class Game implements KeyboardHandler {
                 e.getMessage();
             }
 
-            System.out.println("Player " + player + " played " + table.sequence.get(table.sequence.size() - 1).getCard() + "\n");
+            // System.out.println("Player " + player + " played " + table.sequence.get(table.sequence.size() - 1).getCard() + "\n");
         }
 
         table.setLeadSuit();
-        System.out.println("The lead suit is " + table.leadSuit);
+        //System.out.println("The lead suit is " + table.leadSuit);
 
         trickWinner = table.findTrickWinner();
         List<Card> tableCards = table.getCards();
@@ -452,12 +452,12 @@ public class Game implements KeyboardHandler {
             System.err.println(e.getMessage());
         }
 
-        System.out.println(trickWinner);
+        // System.out.println(trickWinner);
 
         // Use Collections.rotate() with negative shift to change the order of the sequence for the next round
         table.setupOrderForNextTrick(trickWinner);
-        System.out.println("Completed trick. The trick winner is " + trickWinner.getName() + "\n" +
-                "The next trick will be played in the following order: \n" + table.printOrderOfPlay() + "\n");
+        /** System.out.println("Completed trick. The trick winner is " + trickWinner.getName() + "\n" +
+                "The next trick will be played in the following order: \n" + table.printOrderOfPlay() + "\n"); */
     }
 
     public Player run () {
@@ -466,7 +466,7 @@ public class Game implements KeyboardHandler {
 
         setup();
 
-        System.out.println(table);
+        //System.out.println(table);
 
         runTrick();
         table.resetSequence();
@@ -478,8 +478,8 @@ public class Game implements KeyboardHandler {
             table.resetSequence();
         }
 
-        System.out.println(player1.printHand());
-        System.out.println(player2.printHand());
+        //System.out.println(player1.printHand());
+        //System.out.println(player2.printHand());
 
         graphic.getCoverCards().get(0).delete();
         // Last 3 tricks of the game, in which each player plays each of its remaining cards
